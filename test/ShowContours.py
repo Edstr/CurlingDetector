@@ -6,7 +6,7 @@ def splitImage():
     upper_blue = np.array([130,255,255], dtype=np.uint8)
 
     img = cv2.imread("../images/curling2.png",0)
-    thresh1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY)[1]
+    thresh1 = cv2.threshold(img,120,255,cv2.THRESH_BINARY)[1]
 
     kernel = np.ones((4,4),np.uint8)
     

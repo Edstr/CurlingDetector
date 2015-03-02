@@ -1,13 +1,14 @@
 __author__ = 'andy.cheung'
 
 import cv2
+import cv2.cv as cv
 import numpy as np
 
-img = cv2.imread('../images/curling1.png',0)
+img = cv2.imread('../images/curling2.png',0)
 img = cv2.medianBlur(img,5)
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 
-circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,20,param1=50,param2=30,minRadius=0,maxRadius=0)
+circles = cv2.HoughCircles(img,cv.CV_HOUGH_GRADIENT,1,20,param1=200,param2=30,minRadius=40,maxRadius=101)
 
 circles = np.uint16(np.around(circles))
 for i in circles[0,:]:
