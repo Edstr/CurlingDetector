@@ -5,10 +5,10 @@ def splitImage():
     lower_blue = np.array([110, 50, 50], dtype=np.uint8)
     upper_blue = np.array([130,255,255], dtype=np.uint8)
 
-    img = cv2.imread("../images/curling2.png",0)
-    thresh1 = cv2.threshold(img,120,255,cv2.THRESH_BINARY)[1]
+    img = cv2.imread("../images/emptyHouse.png",0)
+    thresh1 = cv2.threshold(img,160,255,cv2.THRESH_BINARY)[1]
 
-    kernel = np.ones((4,4),np.uint8)
+    kernel = np.ones((7,7),np.uint8)
     
     opening = cv2.morphologyEx(thresh1, cv2.MORPH_OPEN, kernel)
 
