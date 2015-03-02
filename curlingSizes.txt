@@ -1,0 +1,8 @@
+Curling :
+	Maison :
+		3,66 m (12'), 
+		2,43 m (8'), 
+		1,22 m (4')
+		0,30 m (1') de diamètre
+	Pierre :
+		0.29 m
