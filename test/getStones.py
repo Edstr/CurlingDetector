@@ -17,33 +17,36 @@ def splitImage():
 
     res = cv2.bitwise_and(img,img, mask= frame_threshed)
 
-    thresh1 = cv2.threshold(res,127,255,cv2.THRESH_TOZERO)[1]
+    thresh1 = cv2.threshold(res,127,255,cv2.THRESH_BINARY)[1]
     kernel = np.ones((3,3),np.uint8)
-    opening = cv2.morphologyEx(thresh1, cv2.MORPH_CROSS, kernel)
-    dilate = cv2.morphologyEx(opening, cv2.MORPH_DILATE, kernel)
+    opening = cv2.morphologyEx(thresh1, cv2.MORPH_OPEN, kernel)
+    dilate = cv2.morphologyEx(opening, cv2.MORPH_GRADIENT, kernel)
+    dilate = cv2.morphologyEx(dilate, cv2.MORPH_CLOSE, kernel)
+
     var = cv2.bitwise_or(opening,dilate)
 
-    img2 = cv2.cvtColor(var,cv2.COLOR_HSV2RGB_FULL)
-    img2 = cv2.cvtColor(img2,cv2.COLOR_RGB2GRAY)
+    #img2 = cv2.cvtColor(var,cv2.COLOR_RGB2GRAY)
+    #img2 = cv2.cvtColor(img2,cv2.COLOR_RGB2GRAY)
 
     cv2.imshow('img',img)
-    cv2.imshow('Stones',img2)
+    cv2.imshow('Stones',var)
+    # cv2.imshow('Stones',img2)
 
     # Circle detector
 
-    img3 = cv2.medianBlur(img2,5)
-    cimg = cv2.cvtColor(img3,cv2.COLOR_GRAY2BGR)
+    cimg = cv2.cvtColor(var,cv2.COLOR_RGB2GRAY)
 
-    circles = cv2.HoughCircles(img3,cv.CV_HOUGH_GRADIENT,1,20,param1=200,param2=30,minRadius=5,maxRadius=0)
+    circles = cv2.HoughCircles(cimg,cv.CV_HOUGH_GRADIENT,1,20,param1=130,param2=7,minRadius=20,maxRadius=30)
 
     circles = np.uint16(np.around(circles))
     for i in circles[0,:]:
         # draw the outer circle
-        cv2.circle(cimg,(i[0],i[1]),i[2],(0,255,0),2)
+        cv2.circle(img,(i[0],i[1]),i[2],(0,255,0),2)
         # draw the center of the circle
-        cv2.circle(cimg,(i[0],i[1]),2,(0,0,255),3)
+        cv2.circle(img,(i[0],i[1]),2,(127,127,0),3)
 
-    cv2.imshow('detected circles',cimg)
+    cimg = cv2.cvtColor(cimg,cv2.COLOR_GRAY2RGBA)
+    cv2.imshow('detected circles',img)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
