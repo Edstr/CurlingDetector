@@ -16,7 +16,6 @@ ratio = 3
 kernel_size = 3
 
 
-
 img = cv2.imread('../images/curling1 - Copie.png')
 blue,green,red = cv2.split(img)
 
@@ -26,11 +25,8 @@ img = cv2.medianBlur(img,5)
 cimg = cv2.cvtColor(img,cv2.COLOR_GRAY2BGR)
 
 # define range of blue color in HSV
-upper_blue = np.array([20, 100, 100])
-lower_blue = np.array([30, 255, 255])
-
-# lower_blue = np.array([110,50,50])
-# upper_blue = np.array([130,255,255])
+lower_blue = np.array([110,50,50])
+upper_blue = np.array([130,255,255])
 
 # Threshold the HSV image to get only blue colors
 mask = cv2.inRange(cimg, lower_blue, upper_blue)
