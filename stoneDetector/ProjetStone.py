@@ -4,6 +4,7 @@ import math
 
 TEAM1 = "Red"
 TEAM2 = "Yellow"
+path_image = ""
 
 def splitImage():
     lower_blue = np.array([110, 50, 50], dtype=np.uint8)
@@ -13,8 +14,10 @@ def splitImage():
     lower_yellow = np.array([20, 100, 100], dtype=np.uint8)
     upper_yellow = np.array([30, 255, 255], dtype=np.uint8)
 
-    house = cv2.imread("../images/emptyHouse2.png")
-    img = cv2.imread("../images/curling2.png")
+    global path_image
+    #house = cv2.imread("../images/emptyHouse.png")
+    #img = cv2.imread("../images/curling2.png")
+    img = cv2.imread(path_image)
 
     hsv_img = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
@@ -170,4 +173,11 @@ def main():
     splitImage()
 
 if __name__ == '__main__':
+    import sys
+
+    global path_image
+    path_image = str(sys.argv[1])
+
     main()
+
+
