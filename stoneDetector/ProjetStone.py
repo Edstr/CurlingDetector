@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import math
 
+TEAM1 = "Red"
+TEAM2 = "Yellow"
+
 def splitImage():
     lower_blue = np.array([110, 50, 50], dtype=np.uint8)
     upper_blue = np.array([130,255,255], dtype=np.uint8)
@@ -102,19 +105,35 @@ def splitImage():
 
     point = 0
     z = 1
+    last = None
+    isStop = True
+
+    global TEAM1
+    global TEAM2
 
     for i in circles_all:
         if i in circles_red:
-            print("red")
-            print(str(int(i[0][1])))
+            if((last == None or last == TEAM1) and isStop == True):
+                last = TEAM1
+                point += 1
+            else:
+                isStop = False
 
-            # cv2.putText(img,str((circles_yellow[0][i][0],circles_yellow[0][i][1])), (circles_yellow[0][i][0]+25,circles_yellow[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),1)
             cv2.putText(img,str(int(z)), (int(i[0][0])+25,int(i[0][1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255),2)
 
         else:
-            print("yellow")
+            if((last == None or last == TEAM2) and isStop == True):
+                last = TEAM2
+                point += 1
+            else:
+                isStop = False
+
             cv2.putText(img,str(int(z)), (int(i[0][0])+25,int(i[0][1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255),2)
-        z= z+1
+        z+=1
+
+    txt = '%s is the winner with %s point(s)'%(last,point)
+
+    cv2.putText(img,str(txt), (0+25,0+25), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
 
     cv2.imshow('Detected stones',img)
     cv2.waitKey(0)
