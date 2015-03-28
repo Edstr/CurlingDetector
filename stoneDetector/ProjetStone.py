@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 import math
-import operator
 
 def splitImage():
     lower_blue = np.array([110, 50, 50], dtype=np.uint8)
@@ -80,7 +79,6 @@ def splitImage():
         # text
         #cv2.putText(img,str((circles_yellow[0][i][0],circles_yellow[0][i][1])), (circles_yellow[0][i][0]+25,circles_yellow[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),1)
 
-
     centerX = center[0,0,0]
     centerY = center[0,0,1]
 
@@ -102,29 +100,21 @@ def splitImage():
     print("DEBUG Dico circles_yellow " , circles_yellow)
     print("DEBUG Dico circles_all " , circles_all)
 
+    point = 0
+    z = 1
+
     for i in circles_all:
         if i in circles_red:
             print("red")
+            print(str(int(i[0][1])))
+
+            # cv2.putText(img,str((circles_yellow[0][i][0],circles_yellow[0][i][1])), (circles_yellow[0][i][0]+25,circles_yellow[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),1)
+            cv2.putText(img,str(int(z)), (int(i[0][0])+25,int(i[0][1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255),2)
+
         else:
             print("yellow")
-
-    # tmp = {}
-    #
-    #
-    # for i in range(len((circles_red[0,:]))):
-    #     # get stone cardinal point
-    #     Xstone = circles_red[0,i,0]
-    #     Ystone = circles_red[0,i,1]
-    #
-    #     distance = math.sqrt(math.pow(centerX-Xstone,2)+math.pow(centerY - Ystone,2))
-    #     print(i," = [",Xstone,Ystone,"] : ",distance)
-    #
-    #     tmp[Xstone,Ystone] = distance
-    #
-    #
-    # redStoneDico = sorted(tmp.items(), key=lambda x:x[1])
-    #
-    # print("DEBUG Dico Stone " , redStoneDico)
+            cv2.putText(img,str(int(z)), (int(i[0][0])+25,int(i[0][1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255),2)
+        z= z+1
 
     cv2.imshow('Detected stones',img)
     cv2.waitKey(0)
@@ -133,7 +123,6 @@ def splitImage():
 #
 def sortStone(circleColorDico,centerX,centerY):
 
-    #print(centerX,centerY)
 
     tmp = {}
 
