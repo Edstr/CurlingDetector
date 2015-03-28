@@ -3,10 +3,6 @@ import numpy as np
 import math
 import operator
 
-# centre de la maison
-centerX = 0
-centerY = 0
-
 def splitImage():
     lower_blue = np.array([110, 50, 50], dtype=np.uint8)
     upper_blue = np.array([130,255,255], dtype=np.uint8)
@@ -64,7 +60,8 @@ def splitImage():
     # Draw lines between the center and the red stones
     for i in range(len(circles_red[0])):
         cv2.line(img,(center[0][0][0],center[0][0][1]),(circles_red[0][i][0],circles_red[0][i][1]),(0,0,255),1)
-        # cv2.putText(img,str(i+1), (circles_red[0][i][0]+25,circles_red[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255),2)
+        # text
+        #cv2.putText(img,str((circles_red[0][i][0],circles_red[0][i][1])), (circles_red[0][i][0]+25,circles_red[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,255),1)
 
 # get centers of yellow stones
     cimg_yellow = cv2.cvtColor(yellow_stones,cv2.COLOR_RGB2GRAY)
@@ -77,28 +74,39 @@ def splitImage():
         # draw the center of the circle
         cv2.circle(img,(i[0],i[1]),1,(0,0,0),3)
 
-    # Draw lines between the center and the yellow stones
+    #Draw lines between the center and the yellow stones
     for i in range(len(circles_yellow[0])):
         cv2.line(img,(center[0][0][0],center[0][0][1]),(circles_yellow[0][i][0],circles_yellow[0][i][1]),(0,255,255),1)
-        # cv2.putText(img,str(i+1), (circles_yellow[0][i][0]+25,circles_yellow[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255),2)
+        # text
+        #cv2.putText(img,str((circles_yellow[0][i][0],circles_yellow[0][i][1])), (circles_yellow[0][i][0]+25,circles_yellow[0][i][1]), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),1)
 
 
     centerX = center[0,0,0]
     centerY = center[0,0,1]
 
     print(centerX,centerY)
+    print(circles_red)
+
 
     # sorted list of stones
-    circles_red = sortStone(circles_red)
-    circles_yellow = sortStone(circles_yellow)
+    circles_red = sortStone(circles_red,centerX,centerY)
+    circles_yellow = sortStone(circles_yellow,centerX,centerY)
 
-    circles_all = {}
-    circles_all.update(circles_red)
-    circles_all.update(circles_yellow)
+    tmp = {}
+    tmp.update(circles_red)
+    tmp.update(circles_yellow)
+
+    circles_all = sorted(tmp.items(), key=lambda x:x[1])
 
     print("DEBUG Dico circles_red " , circles_red)
     print("DEBUG Dico circles_yellow " , circles_yellow)
     print("DEBUG Dico circles_all " , circles_all)
+
+    for i in circles_all:
+        if i in circles_red:
+            print("red")
+        else:
+            print("yellow")
 
     # tmp = {}
     #
@@ -118,23 +126,33 @@ def splitImage():
     #
     # print("DEBUG Dico Stone " , redStoneDico)
 
+    cv2.imshow('Detected stones',img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def sortStone(circleColorDico):
+#
+def sortStone(circleColorDico,centerX,centerY):
+
+    #print(centerX,centerY)
 
     tmp = {}
 
     for i in range(len((circleColorDico[0,:]))):
         # get stone cardinal point
-        Xstone = circleColorDico[0,i,0]
-        Ystone = circleColorDico[0,i,1]
+        Xstone = float(circleColorDico[0,i,0])
+        Ystone = float(circleColorDico[0,i,1])
 
-        distance = math.sqrt(math.pow(centerX-Xstone,2)+math.pow(centerY - Ystone,2))
+        #print( (Xstone-centerX)*(Xstone-centerX))
+        # x = (0 - Xstone - centerX ) * (0 - Xstone - centerX)
+        # y = (0 - Ystone - centerY ) * (0 - Ystone - centerY)
+
+        x = (Xstone - centerX ) * (Xstone - centerX)
+        y = (Ystone - centerY ) * (Ystone - centerY)
+
+        distance = math.sqrt(float(x)+float(y))
         print(i," = [",Xstone,Ystone,"] : ",distance)
 
         tmp[Xstone,Ystone] = distance
-
 
     circleColorDico = sorted(tmp.items(), key=lambda x:x[1])
 
