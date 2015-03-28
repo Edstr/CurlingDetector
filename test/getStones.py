@@ -12,7 +12,7 @@ def splitImage():
     upper_yellow = np.array([30, 255, 255], dtype=np.uint8)
 
     house = cv2.imread("../images/emptyHouse2.png")
-    img = cv2.imread("../images/curling2.png")
+    img = cv2.imread("../images/curling1.png")
 
     hsv_img = cv2.cvtColor(img,cv2.COLOR_BGR2HSV)
 
