@@ -99,11 +99,15 @@ def splitImage():
     circles_red = sortStone(circles_red,centerX,centerY,TEAM1)
     circles_yellow = sortStone(circles_yellow,centerX,centerY,TEAM2)
 
+
+
+    #
     tmp = {}
     tmp.update(circles_red)
     tmp.update(circles_yellow)
 
     circles_all = sorted(tmp.items(), key=lambda x:x[1])
+
 
     #print("DEBUG Dico circles_red " , circles_red)
     #print("DEBUG Dico circles_yellow " , circles_yellow)
@@ -113,10 +117,24 @@ def splitImage():
     for i in circles_all:
         print( i )
 
-    point = 0
+    #print(centerX,centerY)
+    #print("DEBUG Dico circles_red " , circles_red)
+    #print("DEBUG Dico circles_yellow " , circles_yellow)
+    #print("DEBUG Dico circles_all " , circles_all)
+
+
+
+    # variable used for the algorthm
+    point = 0       # count the point
     z = 1
-    last = None
-    isStop = True
+    last = None     # save the first stone
+    isStop = True   # stop the algorith it find a stone with a other color
+
+    # var globat that allow to set up the team's names
+    global TEAM1
+    global TEAM2
+
+    # algorith that allow to count the stones until it detect one of the others terms
 
     for i in circles_all:
         if i in circles_red:
@@ -138,16 +156,16 @@ def splitImage():
             cv2.putText(img,str(int(z)), (int(i[0][0])+25,int(i[0][1])), cv2.FONT_HERSHEY_COMPLEX, 1, (0,255,255),2)
         z+=1
 
+    # display a message at the end of the search
     txt = '%s is the winner with %s point(s)'%(last,point)
-
     cv2.putText(img,str(txt), (0+25,0+25), cv2.FONT_HERSHEY_COMPLEX, 1, (0,0,0),2)
 
     cv2.imshow('Detected stones',img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def sortStone(circleColorDico,centerX,centerY, color):
 
+def sortStone(circleColorDico,centerX,centerY, color):
     tmp = {}
 
     for i in range(len((circleColorDico[0,:]))):
@@ -159,14 +177,20 @@ def sortStone(circleColorDico,centerX,centerY, color):
         # x = (0 - Xstone - centerX ) * (0 - Xstone - centerX)
         # y = (0 - Ystone - centerY ) * (0 - Ystone - centerY)
 
+        # calculate the distance between the house's center and  the stone
         x = (Xstone - centerX ) * (Xstone - centerX)
         y = (Ystone - centerY ) * (Ystone - centerY)
-
         distance = math.sqrt(float(x)+float(y))
+
         print(color," ", i," = [",Xstone,Ystone,"] : ",distance)
 
+        #print(i," = [",Xstone,Ystone,"] : ",distance)
+
+
+        # store the distance in the dico
         tmp[Xstone,Ystone] = distance
 
+    # sort the dictionnary by the distance
     circleColorDico = sorted(tmp.items(), key=lambda x:x[1])
 
     return circleColorDico
