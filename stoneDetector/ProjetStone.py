@@ -1,5 +1,4 @@
 import cv2
-import cv2.cv as cv
 import numpy as np
 import math
 
@@ -46,7 +45,7 @@ def splitImage():
 # get center of the house
     mask = cv2.inRange(cv2.medianBlur(img,5), lower_blue, upper_blue)    # Threshold the HSV image to get only blue colors
 
-    center = cv2.HoughCircles(mask,cv.CV_HOUGH_GRADIENT,1,40,param1=150,param2=15,minRadius=110,maxRadius=120) # maison
+    center = cv2.HoughCircles(mask,cv2.HOUGH_GRADIENT,1,40,param1=150,param2=15,minRadius=110,maxRadius=120) # maison
     center = np.uint16(np.around(center))
     for i in center[0,:]:
         # draw the center of the circle
@@ -54,7 +53,7 @@ def splitImage():
 
 # get centers of red stones
     cimg_red = cv2.cvtColor(red_stones,cv2.COLOR_RGB2GRAY)
-    circles_red = cv2.HoughCircles(cimg_red,cv.CV_HOUGH_GRADIENT,1,20,param1=150,param2=7,minRadius=20,maxRadius=25) # Red stones
+    circles_red = cv2.HoughCircles(cimg_red,cv2.HOUGH_GRADIENT,1,20,param1=150,param2=7,minRadius=20,maxRadius=25) # Red stones
     circles_red = np.uint16(np.around(circles_red))
 
     for i in circles_red[0,:]:
@@ -71,7 +70,7 @@ def splitImage():
 
 # get centers of yellow stones
     cimg_yellow = cv2.cvtColor(yellow_stones,cv2.COLOR_RGB2GRAY)
-    circles_yellow = cv2.HoughCircles(cimg_yellow,cv.CV_HOUGH_GRADIENT,1,20,param1=150,param2=7,minRadius=20,maxRadius=25) # Yellow Stones
+    circles_yellow = cv2.HoughCircles(cimg_yellow,cv2.HOUGH_GRADIENT,1,20,param1=150,param2=7,minRadius=20,maxRadius=25) # Yellow Stones
     circles_yellow = np.uint16(np.around(circles_yellow))
 
     for i in circles_yellow[0,:]:
@@ -121,8 +120,6 @@ def splitImage():
     #print("DEBUG Dico circles_red " , circles_red)
     #print("DEBUG Dico circles_yellow " , circles_yellow)
     #print("DEBUG Dico circles_all " , circles_all)
-
-
 
     # variable used for the algorthm
     point = 0       # count the point

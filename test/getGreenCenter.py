@@ -1,5 +1,5 @@
 import cv2
-import cv2.cv as cv
+#import cv2.cv as cv
 import numpy as np
 
 def splitImage():
@@ -41,7 +41,7 @@ def splitImage():
 # get center of the house
     mask = cv2.inRange(cv2.medianBlur(img,5), lower_green, upper_green)    # Threshold the HSV image to get only green colors
     cv2.imshow('mask',mask)
-    center = cv2.HoughCircles(mask,cv.CV_HOUGH_GRADIENT,1,1,param1=10,param2=1,minRadius=0,maxRadius=500) # maison
+    center = cv2.HoughCircles(mask,cv2.HOUGH_GRADIENT,1,1,param1=10,param2=1,minRadius=0,maxRadius=500) # maison
     # center = np.uint16(np.around(center))
     # for i in center[0,:]:
     #     cv2.circle(img,(i[0],i[1]),i[2],(255,0,255),2)
